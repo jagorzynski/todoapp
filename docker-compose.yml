@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  todoapp-db:
+    image: postgres:alpine
+    container_name: todoapp-db
+    environment:
+      POSTGRES_USER: sothrose
+      POSTGRES_PASSWORD: sothrose
+      POSTGRES_DB: todoapp-db
+    volumes:
+      - todoapp-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  todoapp:
+    image: todoapp:0.0.1-SNAPSHOT
+    container_name: todoapp
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://todoapp-db:5432/todoapp-db
+      SPRING_DATASOURCE_USERNAME: sothrose
+      SPRING_DATASOURCE_PASSWORD: sothrose
+    ports:
+      - "8080:8080"
+    depends_on:
+      - todoapp-db
+
+volumes:
+  todoapp-data:
